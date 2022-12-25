@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>nl.breun.example</groupId>
+  <artifactId>test</artifactId>
+  <version>development</version>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>com.example</groupId>
+          <artifactId>bar</artifactId>
+          <version>2.3.4</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>com.example</groupId>
+        <artifactId>foo</artifactId>
+        <version>1.2.3</version><!-- Dr. Pom wants plugin versions to be managed via <pluginManagement>. -->
+      </plugin>
+      <plugin>
+        <groupId>com.example</groupId>
+        <artifactId>bar</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>nl.breun.doctor_pom</groupId>
+        <artifactId>doctor-pom-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>
