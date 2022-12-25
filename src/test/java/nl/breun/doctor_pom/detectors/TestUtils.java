@@ -1,10 +1,7 @@
 package nl.breun.doctor_pom.detectors;
 
-import nl.breun.doctor_pom.Issue;
-
-import nl.breun.doctor_pom.ProjectObjectModel;
-
 import edu.umd.cs.findbugs.annotations.Nullable;
+import nl.breun.doctor_pom.Issue;
 import org.apache.maven.model.*;
 
 import java.util.Arrays;
@@ -49,24 +46,24 @@ class TestUtils {
     }
 
     /*
-     * Utility methods to create a ProjectObjectModel instance
+     * Utility methods to create a Model instance
      */
 
-    static Model projectObjectModelWithBuildPlugins(Plugin... plugins) {
+    static Model modelWithBuildPlugins(Plugin... plugins) {
         Model model = new Model();
         Build build = buildWithPlugins(plugins);
         model.setBuild(build);
         return model;
     }
 
-    static ProjectObjectModel projectObjectModelWithDependencies(Dependency... dependencies) {
+    static Model modelWithDependencies(Dependency... dependencies) {
         Model model = new Model();
         List<Dependency> dependencyList = Arrays.asList(dependencies);
         model.setDependencies(dependencyList);
-        return new ProjectObjectModel(null, model);
+        return model;
     }
 
-    static ProjectObjectModel projectObjectModelWithManagedBuildPlugins(Plugin... managedPlugins) {
+    static Model modelWithManagedBuildPlugins(Plugin... managedPlugins) {
         Model model = new Model();
         Build build = new Build();
         PluginManagement pluginManagement = new PluginManagement();
@@ -74,23 +71,23 @@ class TestUtils {
         pluginManagement.setPlugins(managedPluginsList);
         build.setPluginManagement(pluginManagement);
         model.setBuild(build);
-        return new ProjectObjectModel(null, model);
+        return model;
     }
 
-    static ProjectObjectModel projectObjectModelWithManagedDependencies(Dependency... managedDependencies) {
+    static Model modelWithManagedDependencies(Dependency... managedDependencies) {
         Model model = new Model();
         DependencyManagement dependencyManagement = new DependencyManagement();
         List<Dependency> managedDependenciesList = Arrays.asList(managedDependencies);
         dependencyManagement.setDependencies(managedDependenciesList);
         model.setDependencyManagement(dependencyManagement);
-        return new ProjectObjectModel(null, model);
+        return model;
     }
 
-    static ProjectObjectModel projectObjectModelWithReportPlugins(ReportPlugin... reportPlugins) {
+    static Model modelWithReportPlugins(ReportPlugin... reportPlugins) {
         Model model = new Model();
         Reporting reporting = reportingWithPlugins(reportPlugins);
         model.setReporting(reporting);
-        return new ProjectObjectModel(null, model);
+        return model;
     }
 
     /*

@@ -1,15 +1,14 @@
 package nl.breun.doctor_pom.detectors;
 
-import nl.breun.doctor_pom.ProjectObjectModel;
-
 import nl.breun.doctor_pom.Issue;
-
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Reporting;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static nl.breun.doctor_pom.detectors.TestUtils.modelWithReportPlugins;
+import static nl.breun.doctor_pom.detectors.TestUtils.reportPlugin;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ReportingPluginVersionDetectorTest {
@@ -18,11 +17,11 @@ class ReportingPluginVersionDetectorTest {
 
     @Test
     void should_report_an_issue_for_report_plugin_with_version() {
-        ProjectObjectModel projectObjectModel = TestUtils.projectObjectModelWithReportPlugins(
-                TestUtils.reportPlugin("org.apache.maven.plugins", "maven-project-info-reports-plugin", "3.4.1")
+        Model model = modelWithReportPlugins(
+                reportPlugin("org.apache.maven.plugins", "maven-project-info-reports-plugin", "3.4.1")
         );
 
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
         List<String> messages = TestUtils.getMessages(issues);
 
         assertThat(messages).containsExactly(
@@ -32,11 +31,11 @@ class ReportingPluginVersionDetectorTest {
 
     @Test
     void should_not_report_an_issue_for_report_plugin_without_version() {
-        ProjectObjectModel projectObjectModel = TestUtils.projectObjectModelWithReportPlugins(
-                TestUtils.reportPlugin("org.apache.maven.plugins", "maven-project-info-reports-plugin", null)
+        Model model = modelWithReportPlugins(
+                reportPlugin("org.apache.maven.plugins", "maven-project-info-reports-plugin", null)
         );
 
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
 
         assertThat(issues).isEmpty();
     }
@@ -45,9 +44,8 @@ class ReportingPluginVersionDetectorTest {
     void should_not_report_an_issue_when_there_is_no_reporting_section() {
         Model model = new Model();
         model.setReporting(null);
-        ProjectObjectModel projectObjectModel = new ProjectObjectModel(null, model);
 
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
 
         assertThat(issues).isEmpty();
     }
@@ -58,9 +56,15 @@ class ReportingPluginVersionDetectorTest {
         Reporting reporting = new Reporting();
         reporting.setPlugins(null);
         model.setReporting(reporting);
-        ProjectObjectModel projectObjectModel = new ProjectObjectModel(null, model);
 
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
+
+        assertThat(issues).isEmpty();
+    }
+
+    @Test
+    void should_not_report_any_issues_for_null_model() {
+        List<Issue> issues = detector.detectIssues(null);
 
         assertThat(issues).isEmpty();
     }

@@ -1,20 +1,14 @@
 package nl.breun.doctor_pom.detectors;
 
-import nl.breun.doctor_pom.ProjectObjectModel;
-
+import nl.breun.doctor_pom.Issue;
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.junit.jupiter.api.Test;
 
-import nl.breun.doctor_pom.Issue;
-
 import java.util.List;
 
+import static nl.breun.doctor_pom.detectors.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
-
-import static nl.breun.doctor_pom.detectors.TestUtils.getMessages;
-import static nl.breun.doctor_pom.detectors.TestUtils.projectObjectModelWithBuildPlugins;
-import static nl.breun.doctor_pom.detectors.TestUtils.plugin;
 
 class BuildPluginVersionDetectorTest {
 
@@ -22,12 +16,11 @@ class BuildPluginVersionDetectorTest {
 
     @Test
     void should_report_an_issue_for_build_plugin_with_version() {
-        Model model = projectObjectModelWithBuildPlugins(
+        Model model = modelWithBuildPlugins(
                 plugin("org.jetbrains.kotlin", "kotlin-maven-plugin", "1.6.21")
         );
 
-        ProjectObjectModel projectObjectModel = new ProjectObjectModel(null, model);
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
         List<String> messages = getMessages(issues);
 
         assertThat(messages).contains(
@@ -37,12 +30,11 @@ class BuildPluginVersionDetectorTest {
 
     @Test
     void should_not_report_an_issue_for_build_plugin_without_version() {
-        Model model = projectObjectModelWithBuildPlugins(
+        Model model = modelWithBuildPlugins(
                 plugin("org.apache.maven.plugins", "maven-compiler-plugin", null)
         );
 
-        ProjectObjectModel projectObjectModel = new ProjectObjectModel(null, model);
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
 
         assertThat(issues).isEmpty();
     }
@@ -52,8 +44,7 @@ class BuildPluginVersionDetectorTest {
         Model model = new Model();
         model.setBuild(null);
 
-        ProjectObjectModel projectObjectModel = new ProjectObjectModel(null, model);
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
 
         assertThat(issues).isEmpty();
     }
@@ -65,8 +56,14 @@ class BuildPluginVersionDetectorTest {
         build.setPlugins(null);
         model.setBuild(build);
 
-        ProjectObjectModel projectObjectModel = new ProjectObjectModel(null, model);
-        List<Issue> issues = detector.detectIssues(projectObjectModel);
+        List<Issue> issues = detector.detectIssues(model);
+
+        assertThat(issues).isEmpty();
+    }
+
+    @Test
+    void should_not_report_any_issues_for_null_model() {
+        List<Issue> issues = detector.detectIssues(null);
 
         assertThat(issues).isEmpty();
     }

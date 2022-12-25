@@ -46,23 +46,18 @@ class FindIssuesMojo extends AbstractMojo {
         }
 
         File pomFile = mavenProject.getFile();
-        ProjectObjectModel projectObjectModel = buildProjectObjectModel(pomFile);
+        Model rawModel = getRawModel(pomFile);
 
-        List<Issue> issues = runIssueDetectors(projectObjectModel);
+        List<Issue> issues = runIssueDetectors(rawModel);
 
         logIssuesIfAny(pomFile, issues);
         throwIfApplicable(pomFile, issues);
     }
 
-    private ProjectObjectModel buildProjectObjectModel(File pomFile) throws MojoExecutionException {
-        Model rawModel = getRawModel(pomFile);
-        return new ProjectObjectModel(pomFile, rawModel);
-    }
-
-    private List<Issue> runIssueDetectors(ProjectObjectModel projectObjectModel) {
+    private List<Issue> runIssueDetectors(Model rawModel) {
         List<Issue> allIssues = new ArrayList<>();
         for (IssueDetector issueDetector : issueDetectors) {
-            List<Issue> issues = issueDetector.detectIssues(projectObjectModel);
+            List<Issue> issues = issueDetector.detectIssues(rawModel);
             allIssues.addAll(issues);
         }
         return allIssues;

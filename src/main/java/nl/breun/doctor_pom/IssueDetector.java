@@ -1,5 +1,7 @@
 package nl.breun.doctor_pom;
 
+import org.apache.maven.model.Model;
+
 import java.util.List;
 
 /**
@@ -11,8 +13,8 @@ public interface IssueDetector {
      * Detects if a particular issue exists in a Maven Project Object Model (POM).
      * If so, a result is returned which indicates the detected issue instances.
      *
-     * @param projectObjectModel a Project Object Model (POM)
+     * @param rawModel a raw Project Object Model (POM)
      * @return the result of executing the detection logic, containing any issue instances that were detected in the Project Object Model (POM)
      */
-    List<Issue> detectIssues(ProjectObjectModel projectObjectModel);
+    List<Issue> detectIssues(Model rawModel);
 }

@@ -2,7 +2,6 @@ package nl.breun.doctor_pom.detectors;
 
 import nl.breun.doctor_pom.Issue;
 import nl.breun.doctor_pom.IssueDetector;
-import nl.breun.doctor_pom.ProjectObjectModel;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Model;
@@ -22,8 +21,11 @@ import java.util.stream.Collectors;
 class DuplicateManagedDependencyDetector implements IssueDetector {
 
     @Override
-    public List<Issue> detectIssues(ProjectObjectModel projectObjectModel) {
-        Model rawModel = projectObjectModel.getRawModel();
+    public List<Issue> detectIssues(Model rawModel) {
+        if (rawModel == null) {
+            return Collections.emptyList();
+        }
+
         DependencyManagement dependencyManagement = rawModel.getDependencyManagement();
         if (dependencyManagement == null) {
             return Collections.emptyList();

@@ -2,7 +2,6 @@ package nl.breun.doctor_pom.detectors;
 
 import nl.breun.doctor_pom.Issue;
 import nl.breun.doctor_pom.IssueDetector;
-import nl.breun.doctor_pom.ProjectObjectModel;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.ReportPlugin;
 import org.apache.maven.model.Reporting;
@@ -21,8 +20,11 @@ import java.util.stream.Collectors;
 class ReportingPluginVersionDetector implements IssueDetector {
 
     @Override
-    public List<Issue> detectIssues(ProjectObjectModel projectObjectModel) {
-        Model rawModel = projectObjectModel.getRawModel();
+    public List<Issue> detectIssues(Model rawModel) {
+        if (rawModel == null) {
+            return Collections.emptyList();
+        }
+
         Reporting reporting = rawModel.getReporting();
         if (reporting == null) {
             return Collections.emptyList();
