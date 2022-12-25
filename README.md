@@ -15,7 +15,7 @@ Add the plugin in the build section of the root `pom.xml` file of your project t
 
 ```
 <properties>
-  <doctor-pom-maven-plugin.version>1.0.0-SNAPSHOT<doctor-pom-maven-plugin.version>
+  <doctor-pom-maven-plugin.version>0.1.0-SNAPSHOT<doctor-pom-maven-plugin.version>
 </properties>
 
 <build>
